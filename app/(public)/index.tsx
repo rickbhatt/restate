@@ -3,6 +3,7 @@ import images from "@/constants/images";
 import { useAuth, useOAuth } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
+import * as Linking from "expo-linking";
 import {
   Image,
   Pressable,
@@ -27,8 +28,15 @@ const SignIn = () => {
         router.replace("/(root)/(tabs)");
         return;
       }
-
       const { createdSessionId, setActive } = await startGoogleOAuthFlow();
+
+      /*  
+
+     WITH THIS WE CAN SET THE REDIRECT URI, SO DEEP LINKING ISSUE DOES NOT HAPPEN
+     
+      const { createdSessionId, setActive } = await startGoogleOAuthFlow({
+        redirectUrl: Linking.createURL("/(public)", { scheme: "restate" }),
+      });*/
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
       }

@@ -35,6 +35,8 @@ const InitialLayout = () => {
     "Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
   });
 
+  const { isSignedIn } = useAuth();
+
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
@@ -45,8 +47,12 @@ const InitialLayout = () => {
     <>
       <StatusBar style="dark" backgroundColor="#fff" />
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(public)" />
-        <Stack.Screen name="(root)/(tabs)" />
+        <Stack.Protected guard={!isSignedIn as boolean}>
+          <Stack.Screen name="(public)" />
+        </Stack.Protected>
+        <Stack.Protected guard={isSignedIn as boolean}>
+          <Stack.Screen name="(root)/(tabs)" />
+        </Stack.Protected>
       </Stack>
     </>
   );
