@@ -1,6 +1,6 @@
 import icons from "@/constants/icons";
 import images from "@/constants/images";
-import { useAuth, useOAuth } from "@clerk/clerk-expo";
+import { useAuth, useOAuth, useSSO } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
 import * as Linking from "expo-linking";
@@ -15,9 +15,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
-  const { startOAuthFlow: startGoogleOAuthFlow } = useOAuth({
-    strategy: "oauth_google",
-  });
+  // const { startOAuthFlow: startGoogleOAuthFlow } = useOAuth({
+  //   strategy: "oauth_google",
+  // });
+
+  const { startSSOFlow: startGoogleOAuthFlow } = useSSO();
 
   const { isSignedIn } = useAuth();
   const router = useRouter();
@@ -28,13 +30,15 @@ const SignIn = () => {
         router.replace("/(root)/(tabs)");
         return;
       }
-      const { createdSessionId, setActive } = await startGoogleOAuthFlow();
+      const { createdSessionId, setActive } = await startGoogleOAuthFlow({
+        strategy: "oauth_google",
+      });
 
       /*  
 
      WITH THIS WE CAN SET THE REDIRECT URI, SO DEEP LINKING ISSUE DOES NOT HAPPEN
-     
-      const { createdSessionId, setActive } = await startGoogleOAuthFlow({
+     const { createdSessionId, setActive } = await startGoogleOAuthFlow({
+        strategy: "oauth_google",
         redirectUrl: Linking.createURL("/(public)", { scheme: "restate" }),
       });*/
       if (createdSessionId) {
