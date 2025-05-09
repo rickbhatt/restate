@@ -1,5 +1,6 @@
 import icons from "@/constants/icons";
 import images from "@/constants/images";
+import { useAuth, useOAuth } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -13,10 +14,27 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
+  const { startOAuthFlow: startGoogleOAuthFlow } = useOAuth({
+    strategy: "oauth_google",
+  });
+
+  const { isSignedIn } = useAuth();
   const router = useRouter();
 
-  const handleLogin = () => {
-    console.log("login");
+  const handleLogin = async () => {
+    try {
+      if (isSignedIn) {
+        router.replace("/(root)/(tabs)");
+        return;
+      }
+
+      const { createdSessionId, setActive } = await startGoogleOAuthFlow();
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId });
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleGoogleLogin ~ error:", error);
+    }
   };
 
   return (

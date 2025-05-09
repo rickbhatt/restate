@@ -1,11 +1,29 @@
-import { Slot } from "expo-router";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import { ClerkLoaded, ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import { Slot, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import "./global.css";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
+import { LogBox } from "react-native";
+
+const clerkPublishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+if (!clerkPublishableKey) {
+  throw new Error(
+    "Missing Clerk Publishable Key. Please set the EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY environment variable."
+  );
+}
+
+LogBox.ignoreLogs(["Clerk: Clerk has been loaded with development keys."]);
 
 SplashScreen.preventAutoHideAsync();
+
+SplashScreen.setOptions({
+  fade: true,
+  duration: 400,
+});
 
 const InitialLayout = () => {
   const [fontsLoaded] = useFonts({
@@ -26,11 +44,20 @@ const InitialLayout = () => {
   return (
     <>
       <StatusBar style="dark" backgroundColor="#fff" />
-      <Slot />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(public)" />
+        <Stack.Screen name="(root)/(tabs)" />
+      </Stack>
     </>
   );
 };
 
 export default function RootLayout() {
-  return <InitialLayout />;
+  return (
+    <ClerkProvider publishableKey={clerkPublishableKey} tokenCache={tokenCache}>
+      <ClerkLoaded>
+        <InitialLayout />
+      </ClerkLoaded>
+    </ClerkProvider>
+  );
 }
