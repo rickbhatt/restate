@@ -35,6 +35,7 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
+        animation: "fade",
         tabBarButton: ({
           children,
           onPress,
