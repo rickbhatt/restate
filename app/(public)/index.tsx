@@ -27,7 +27,7 @@ const SignIn = () => {
   const handleLogin = async () => {
     try {
       if (isSignedIn) {
-        router.replace("/(root)/(tabs)");
+        router.replace("/(auth)/(tabs)");
         return;
       }
       const { createdSessionId, setActive } = await startGoogleOAuthFlow({

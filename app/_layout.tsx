@@ -45,13 +45,13 @@ const InitialLayout = () => {
 
   return (
     <>
-      <StatusBar style="dark" backgroundColor="#fff" />
+      <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Protected guard={!isSignedIn as boolean}>
           <Stack.Screen name="(public)" />
         </Stack.Protected>
         <Stack.Protected guard={isSignedIn as boolean}>
-          <Stack.Screen name="(root)/(tabs)" />
+          <Stack.Screen name="(auth)/(tabs)" />
         </Stack.Protected>
       </Stack>
     </>
