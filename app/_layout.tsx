@@ -7,8 +7,13 @@ import "./global.css";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { LogBox } from "react-native";
+import { ConvexReactClient, ConvexProvider } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
 
 const clerkPublishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
+  unsavedChangesWarning: false,
+});
 
 if (!clerkPublishableKey) {
   throw new Error(
@@ -62,7 +67,9 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={clerkPublishableKey} tokenCache={tokenCache}>
       <ClerkLoaded>
-        <InitialLayout />
+        <ConvexProvider client={convex}>
+          <InitialLayout />
+        </ConvexProvider>
       </ClerkLoaded>
     </ClerkProvider>
   );

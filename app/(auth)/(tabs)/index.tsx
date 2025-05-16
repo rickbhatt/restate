@@ -3,21 +3,18 @@ import Filters from "@/components/Filters";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
-import { useAuth, useUser } from "@clerk/clerk-expo";
+import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/clerk-expo";
+import { useQuery } from "convex/react";
 import React from "react";
-import {
-  FlatList,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const RootIndex = () => {
-  const { signOut } = useAuth();
   const { user } = useUser();
+
+  const data = useQuery(api.users.getAllUsers);
+  console.log("🚀 ~ RootIndex ~ data:", data);
 
   return (
     <SafeAreaView className="bg-white h-full" edges={["bottom", "top"]}>
