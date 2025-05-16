@@ -1,17 +1,9 @@
 import icons from "@/constants/icons";
 import images from "@/constants/images";
-import { useAuth, useOAuth, useSSO } from "@clerk/clerk-expo";
+import { useAuth, useSSO } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
-import * as Linking from "expo-linking";
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
