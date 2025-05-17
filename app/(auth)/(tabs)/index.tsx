@@ -13,9 +13,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const RootIndex = () => {
   const { user } = useUser();
 
-  const data = useQuery(api.users.getAllUsers);
-  console.log("🚀 ~ RootIndex ~ data:", data);
-
   return (
     <SafeAreaView className="bg-white h-full" edges={["bottom", "top"]}>
       <FlatList

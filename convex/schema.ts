@@ -9,5 +9,7 @@ export const User = {
 };
 
 export default defineSchema({
-  users: defineTable(User),
+  users: defineTable(User)
+    .index("by_email", ["email"])
+    .index("by_clerkId", ["clerkId"]),
 });
