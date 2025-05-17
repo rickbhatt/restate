@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { LogBox } from "react-native";
 import "./global.css";
+import { UserProfileProvider } from "@/context/UserProfileContext";
 
 const clerkPublishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
@@ -68,7 +69,9 @@ export default function RootLayout() {
     <ClerkProvider publishableKey={clerkPublishableKey} tokenCache={tokenCache}>
       <ClerkLoaded>
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-          <InitialLayout />
+          <UserProfileProvider>
+            <InitialLayout />
+          </UserProfileProvider>
         </ConvexProviderWithClerk>
       </ClerkLoaded>
     </ClerkProvider>

@@ -1,15 +1,17 @@
-import { View, Text, ScrollView, Image, Pressable } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import icons from "@/constants/icons";
-import images from "@/constants/images";
 import SettingsItem from "@/components/SettingsItem";
 import { settings } from "@/constants/data";
-import { useAuth, useUser } from "@clerk/clerk-expo";
+import icons from "@/constants/icons";
+import images from "@/constants/images";
+import { useUserProfile } from "@/context/UserProfileContext";
+import { useAuth } from "@clerk/clerk-expo";
+import React from "react";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Profile = () => {
   const { signOut } = useAuth();
-  const { user } = useUser();
+
+  const { userProfile } = useUserProfile();
 
   return (
     <SafeAreaView className="h-full bg-white">
@@ -25,7 +27,11 @@ const Profile = () => {
           <View className="flex flex-col items-center mt-5">
             <View className="relative">
               <Image
-                source={{ uri: user?.imageUrl || images.avatar }}
+                source={
+                  userProfile?.imageUrl
+                    ? { uri: userProfile?.imageUrl }
+                    : images.avatar
+                }
                 className="size-44 rounded-full relative"
               />
               <Pressable className="absolute bottom-0 right-0">
@@ -33,7 +39,7 @@ const Profile = () => {
               </Pressable>
             </View>
             <Text className="text-2xl font-rubik-bold mt-2">
-              {`${user?.firstName} ${user?.lastName}`}
+              {userProfile?.fullName}
             </Text>
           </View>
         </View>

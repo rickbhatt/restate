@@ -1,4 +1,9 @@
-import { internalMutation, mutation, query } from "@/convex/_generated/server";
+import {
+  internalMutation,
+  mutation,
+  query,
+  QueryCtx,
+} from "@/convex/_generated/server";
 import { v } from "convex/values";
 
 export const createUser = internalMutation({
@@ -24,7 +29,7 @@ export const deleteUser = internalMutation({
   handler: async (ctx, { clerkId }) => {
     let user = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+      .withIndex("byClerkId", (q) => q.eq("clerkId", clerkId))
       .unique();
 
     if (user !== null) {
@@ -37,16 +42,31 @@ export const deleteUser = internalMutation({
   },
 });
 
-export const getUserByClerkId = query({
-  args: {
-    clerkId: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
-      .unique();
+export const getUserByClerkId = async ({
+  ctx,
+  clerkId,
+}: {
+  ctx: QueryCtx;
+  clerkId: string;
+}) => {
+  const user = await ctx.db
+    .query("users")
+    .withIndex("byClerkId", (q) => q.eq("clerkId", clerkId))
+    .unique();
 
+  return user;
+};
+
+export const getAuthenticatedUser = async (ctx: QueryCtx) => {
+  const identity = await ctx.auth.getUserIdentity();
+  if (identity === null) return null;
+
+  return await getUserByClerkId({ ctx, clerkId: identity.subject });
+};
+
+export const getAuthenticatedUserProfile = query({
+  handler: async (ctx) => {
+    const user = await getAuthenticatedUser(ctx);
     return user;
   },
 });

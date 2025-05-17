@@ -3,15 +3,13 @@ import Filters from "@/components/Filters";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
-import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/clerk-expo";
-import { useQuery } from "convex/react";
+import { useUserProfile } from "@/context/UserProfileContext";
 import React from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const RootIndex = () => {
-  const { user } = useUser();
+  const { userProfile } = useUserProfile();
 
   return (
     <SafeAreaView className="bg-white h-full" edges={["bottom", "top"]}>
@@ -28,7 +26,11 @@ const RootIndex = () => {
             <View className="flex flex-row items-center justify-between mt-5">
               <View className="flex flex-row items-center">
                 <Image
-                  source={{ uri: user?.imageUrl || images.avatar }}
+                  source={
+                    userProfile?.imageUrl
+                      ? { uri: userProfile?.imageUrl }
+                      : images.avatar
+                  }
                   className="size-12 rounded-full"
                 />
                 <View className="flex flex-col items-start ml-2 justify-center">
@@ -36,7 +38,7 @@ const RootIndex = () => {
                     Good Morning
                   </Text>
                   <Text className="text-base font-rubik-medium text-black-300">
-                    {user?.fullName}
+                    {userProfile?.fullName}
                   </Text>
                 </View>
               </View>

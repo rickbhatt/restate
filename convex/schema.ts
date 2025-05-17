@@ -10,6 +10,6 @@ export const User = {
 
 export default defineSchema({
   users: defineTable(User)
-    .index("by_email", ["email"])
-    .index("by_clerkId", ["clerkId"]),
+    .index("byEmail", ["email"])
+    .index("byClerkId", ["clerkId"]),
 });
