@@ -29,7 +29,7 @@ const RootIndex = () => {
                   source={
                     userProfile?.imageUrl
                       ? { uri: userProfile?.imageUrl }
-                      : images.avatar
+                      : images.userImagePlacholder
                   }
                   className="size-12 rounded-full"
                 />

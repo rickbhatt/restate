@@ -30,7 +30,7 @@ const Profile = () => {
                 source={
                   userProfile?.imageUrl
                     ? { uri: userProfile?.imageUrl }
-                    : images.avatar
+                    : images.userImagePlacholder
                 }
                 className="size-44 rounded-full relative"
               />
