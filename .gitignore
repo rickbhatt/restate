@@ -10,7 +10,6 @@ ios/
 dist/
 web-build/
 expo-env.d.ts
-*.d.ts
 .vscode/
 
 # Native
