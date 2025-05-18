@@ -11,7 +11,7 @@ export const User = {
 export const Agent = {
   name: v.string(),
   email: v.string(),
-  avatarUrl: v.optional(v.string()),
+  imageUrl: v.optional(v.string()),
 };
 
 export const Gallery = {
@@ -21,7 +21,7 @@ export const Gallery = {
 
 export const Review = {
   name: v.string(),
-  avatarUrl: v.optional(v.string()),
+  imageUrl: v.optional(v.string()),
   review: v.string(),
   rating: v.float64(),
   propertyId: v.id("properties"),
@@ -47,12 +47,14 @@ export const Property = {
   bedrooms: v.number(),
   bathroom: v.number(),
   rating: v.float64(),
-  facilities: v.union(
-    v.literal("Gym"),
-    v.literal("Parking"),
-    v.literal("Laundry"),
-    v.literal("WiFi"),
-    v.literal("Pet Friendly")
+  facilities: v.array(
+    v.union(
+      v.literal("Gym"),
+      v.literal("Parking"),
+      v.literal("Laundry"),
+      v.literal("WiFi"),
+      v.literal("Pet Friendly")
+    )
   ),
   imageUrl: v.string(),
   geoLocation: v.string(),
