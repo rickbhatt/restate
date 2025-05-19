@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as convexSeed from "../convexSeed.js";
 import type * as http from "../http.js";
+import type * as properties from "../properties.js";
 import type * as users from "../users.js";
 
 /**
@@ -28,6 +29,7 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   convexSeed: typeof convexSeed;
   http: typeof http;
+  properties: typeof properties;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

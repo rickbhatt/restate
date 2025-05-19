@@ -4,12 +4,16 @@ import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { useUserProfile } from "@/context/UserProfileContext";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
 import React from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const RootIndex = () => {
   const { userProfile } = useUserProfile();
+
+  const propertyData = useQuery(api.properties.getLatestProperties);
 
   return (
     <SafeAreaView className="bg-white h-full" edges={["bottom", "top"]}>

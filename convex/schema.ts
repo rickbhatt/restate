@@ -58,6 +58,7 @@ export const Property = {
   ),
   imageUrl: v.string(),
   geoLocation: v.string(),
+  searchText: v.string(), // Generated from name, address, and type
 };
 
 export default defineSchema({
@@ -65,7 +66,12 @@ export default defineSchema({
     .index("byEmail", ["email"])
     .index("byClerkId", ["clerkId"]),
   agents: defineTable(Agent),
-  properties: defineTable(Property).index("byAgent", ["agentId"]),
+  properties: defineTable(Property)
+    .index("byType", ["type"])
+    .searchIndex("fullTextSearch", {
+      searchField: "searchText",
+      filterFields: ["type"],
+    }),
   galleries: defineTable(Gallery).index("byProperty", ["propertyId"]),
   reviews: defineTable(Review).index("byProperty", ["propertyId"]),
 });

@@ -184,3 +184,23 @@ export const runSeed = mutation({
     return await seedData(ctx);
   },
 });
+
+export const backfillSearchText = mutation({
+  handler: async (ctx) => {
+    // Fetch all properties
+    const properties = await ctx.db.query("properties").collect();
+
+    for (const property of properties) {
+      // Compute searchText
+      const searchText = [property.name, property.address, property.type]
+        .join(" ")
+        .toLowerCase();
+
+      // Only update if searchText is missing or incorrect
+      if (property.searchText !== searchText) {
+        await ctx.db.patch(property._id, { searchText });
+      }
+    }
+    return "Backfill complete!";
+  },
+});
