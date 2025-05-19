@@ -19,18 +19,20 @@ export const getLatestProperties = query({
 
 export const getProperties = query({
   args: {
-    filter: v.union(
-      v.literal("House"),
-      v.literal("Townhouse"),
-      v.literal("Apartment"),
-      v.literal("Condo"),
-      v.literal("Villa"),
-      v.literal("Duplex"),
-      v.literal("Studio"),
-      v.literal("Other"),
-      v.literal("All")
+    filter: v.optional(
+      v.union(
+        v.literal("House"),
+        v.literal("Townhouse"),
+        v.literal("Apartment"),
+        v.literal("Condo"),
+        v.literal("Villa"),
+        v.literal("Duplex"),
+        v.literal("Studio"),
+        v.literal("Other"),
+        v.literal("All")
+      )
     ),
-    query: v.string(),
+    query: v.optional(v.string()),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, { filter, query: searchQuery, limit }) => {

@@ -1,30 +1,90 @@
 import { Card, FeatureCard } from "@/components/Cards";
 import Filters from "@/components/Filters";
+import NoResults from "@/components/NoResults";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { useUserProfile } from "@/context/UserProfileContext";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { FlatList, Image, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const RootIndex = () => {
   const { userProfile } = useUserProfile();
 
-  const propertyData = useQuery(api.properties.getLatestProperties);
+  const router = useRouter();
+
+  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
+
+  const latestProperties = useQuery(api.properties.getLatestProperties);
+
+  // Define the valid property types
+  const validPropertyTypes = [
+    "House",
+    "Townhouse",
+    "Apartment",
+    "Condo",
+    "Villa",
+    "Duplex",
+    "Studio",
+    "Other",
+    "All",
+  ] as const;
+
+  // Type guard to check if a string is a valid property type
+  type PropertyType = (typeof validPropertyTypes)[number];
+  const isValidPropertyType = (
+    value: string | undefined
+  ): value is PropertyType => {
+    return (
+      value !== undefined && validPropertyTypes.includes(value as PropertyType)
+    );
+  };
+
+  // Use the filter if valid, otherwise default to "All"
+  const filterValue = isValidPropertyType(params.filter)
+    ? params.filter
+    : "All";
+
+  const properties = useQuery(api.properties.getProperties, {
+    filter: filterValue,
+    query: params.query!,
+    limit: 10,
+  });
+
+  const handleCardPress = (id: string) => {
+    router.push(`/(auth)/properties/${id}`);
+  };
 
   return (
     <SafeAreaView className="bg-white h-full" edges={["bottom", "top"]}>
       <FlatList
-        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
-        renderItem={({ item }) => <Card />}
-        keyExtractor={(item) => item.toString()}
+        data={properties}
+        renderItem={({ item }) => (
+          <Card item={item} onPress={() => handleCardPress(item._id)} />
+        )}
+        keyExtractor={(item) => item._id.toString()}
         numColumns={2}
         contentContainerClassName="pb-32"
         columnWrapperClassName="flex gap-5 px-5"
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          properties === undefined ? (
+            <ActivityIndicator size="large" className="text-primary-300" mt-5 />
+          ) : (
+            <NoResults />
+          )
+        }
         ListHeaderComponent={
           <View className="px-5">
             <View className="flex flex-row items-center justify-between mt-5">
@@ -61,15 +121,30 @@ const RootIndex = () => {
                   </Text>
                 </Pressable>
               </View>
-              <FlatList
-                data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-                renderItem={({ item }) => <FeatureCard />}
-                keyExtractor={(item) => item.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                bounces={false}
-                contentContainerClassName="flex gap-5 mt-5"
-              />
+              {latestProperties === undefined ? (
+                <ActivityIndicator
+                  size="large"
+                  className="text-primary-300"
+                  mt-5
+                />
+              ) : latestProperties.length === 0 ? (
+                <NoResults />
+              ) : (
+                <FlatList
+                  data={latestProperties}
+                  renderItem={({ item }) => (
+                    <FeatureCard
+                      item={item}
+                      onPress={() => handleCardPress(item._id)}
+                    />
+                  )}
+                  keyExtractor={(item) => item._id.toString()}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  bounces={false}
+                  contentContainerClassName="flex gap-5 mt-5"
+                />
+              )}
             </View>
             {/* Recomendation */}
             <View className="flex flex-row items-center justify-between">
