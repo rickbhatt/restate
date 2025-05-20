@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import { gallery } from "@/constants/data";
 
 export const getPropertiesForHome = query({
   handler: async (ctx) => {
@@ -75,6 +76,45 @@ export const getProperties = query({
     } catch (error) {
       console.log(error);
       return [];
+    }
+  },
+});
+
+export const getPropertyById = query({
+  args: {
+    id: v.id("properties"),
+  },
+  handler: async (ctx, { id }) => {
+    try {
+      // Fetch the property by ID
+      const property = await ctx.db.get(id);
+      if (!property) {
+        return null; // Property not found
+      }
+
+      // Fetch all reviews for this property
+      const reviews = await ctx.db
+        .query("reviews")
+        .filter((q) => q.eq(q.field("propertyId"), id))
+        .collect();
+
+      const agent = await ctx.db.get(property.agentId);
+
+      const gallery = await ctx.db
+        .query("galleries")
+        .filter((q) => q.eq(q.field("propertyId"), id))
+        .collect();
+
+      // Return both property and its reviews
+      return {
+        ...property,
+        reviews,
+        agent: agent,
+        gallery,
+      };
+    } catch (error) {
+      console.log(error);
+      return null;
     }
   },
 });

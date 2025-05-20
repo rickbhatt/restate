@@ -29,8 +29,8 @@ export const Review = {
 
 export const Property = {
   agentId: v.id("agents"),
-  isRecommended: v.optional(v.boolean()),
-  isFeatured: v.optional(v.boolean()),
+  isRecommended: v.boolean(),
+  isFeatured: v.boolean(),
   name: v.string(),
   type: v.union(
     v.literal("House"),
