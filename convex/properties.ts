@@ -1,18 +1,28 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 
-export const getLatestProperties = query({
+export const getPropertiesForHome = query({
   handler: async (ctx) => {
     try {
-      const properties = await ctx.db
+      const featuredProperties = await ctx.db
         .query("properties")
-        .order("asc")
+        .filter((q) => q.eq(q.field("isFeatured"), true))
+        .collect();
+      const recommendedProperties = await ctx.db
+        .query("properties")
+        .filter((q) => q.eq(q.field("isRecommended"), true))
         .collect();
 
-      return properties;
+      return {
+        featuredProperties,
+        recommendedProperties,
+      };
     } catch (error) {
       console.log(error);
-      return [];
+      return {
+        featuredProperties: [],
+        recommendedProperties: [],
+      };
     }
   },
 });

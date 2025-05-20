@@ -1,5 +1,4 @@
 import { Card, FeatureCard } from "@/components/Cards";
-import Filters from "@/components/Filters";
 import NoResults from "@/components/NoResults";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
@@ -7,7 +6,7 @@ import images from "@/constants/images";
 import { useUserProfile } from "@/context/UserProfileContext";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
@@ -24,43 +23,10 @@ const RootIndex = () => {
 
   const router = useRouter();
 
-  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
+  const propertiesForHome = useQuery(api.properties.getPropertiesForHome);
 
-  const latestProperties = useQuery(api.properties.getLatestProperties);
-
-  // Define the valid property types
-  const validPropertyTypes = [
-    "House",
-    "Townhouse",
-    "Apartment",
-    "Condo",
-    "Villa",
-    "Duplex",
-    "Studio",
-    "Other",
-    "All",
-  ] as const;
-
-  // Type guard to check if a string is a valid property type
-  type PropertyType = (typeof validPropertyTypes)[number];
-  const isValidPropertyType = (
-    value: string | undefined
-  ): value is PropertyType => {
-    return (
-      value !== undefined && validPropertyTypes.includes(value as PropertyType)
-    );
-  };
-
-  // Use the filter if valid, otherwise default to "All"
-  const filterValue = isValidPropertyType(params.filter)
-    ? params.filter
-    : "All";
-
-  const properties = useQuery(api.properties.getProperties, {
-    filter: filterValue,
-    query: params.query!,
-    limit: 10,
-  });
+  const { featuredProperties = [], recommendedProperties = [] } =
+    propertiesForHome ?? {};
 
   const handleCardPress = (id: string) => {
     router.push(`/(auth)/properties/${id}`);
@@ -69,7 +35,7 @@ const RootIndex = () => {
   return (
     <SafeAreaView className="bg-white h-full" edges={["bottom", "top"]}>
       <FlatList
-        data={properties}
+        data={recommendedProperties}
         renderItem={({ item }) => (
           <Card item={item} onPress={() => handleCardPress(item._id)} />
         )}
@@ -79,7 +45,7 @@ const RootIndex = () => {
         columnWrapperClassName="flex gap-5 px-5"
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          properties === undefined ? (
+          propertiesForHome === undefined ? (
             <ActivityIndicator size="large" className="text-primary-300" mt-5 />
           ) : (
             <NoResults />
@@ -108,7 +74,12 @@ const RootIndex = () => {
               </View>
               <Image source={icons.bell} className="size-6" />
             </View>
-            <Search />
+            <Pressable
+              pointerEvents="box-only"
+              onPress={() => router.push("/(auth)/(tabs)/explore")}
+            >
+              <Search />
+            </Pressable>
             {/* Featured */}
             <View className="my-5">
               <View className="flex flex-row items-center justify-between">
@@ -121,17 +92,17 @@ const RootIndex = () => {
                   </Text>
                 </Pressable>
               </View>
-              {latestProperties === undefined ? (
+              {propertiesForHome === undefined ? (
                 <ActivityIndicator
                   size="large"
                   className="text-primary-300"
                   mt-5
                 />
-              ) : latestProperties.length === 0 ? (
+              ) : featuredProperties.length === 0 ? (
                 <NoResults />
               ) : (
                 <FlatList
-                  data={latestProperties}
+                  data={featuredProperties}
                   renderItem={({ item }) => (
                     <FeatureCard
                       item={item}
@@ -157,9 +128,6 @@ const RootIndex = () => {
                 </Text>
               </Pressable>
             </View>
-            {/* Filters */}
-
-            <Filters />
           </View>
         }
       />

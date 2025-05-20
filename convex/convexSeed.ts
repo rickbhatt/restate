@@ -204,3 +204,17 @@ export const backfillSearchText = mutation({
     return "Backfill complete!";
   },
 });
+
+export const backFillingFeaturedAndRecommended = mutation({
+  handler: async (ctx) => {
+    const properties = await ctx.db.query("properties").collect();
+
+    let randomArrayRecommended = getRandomSubset(properties, 5, 15);
+
+    for (let property of randomArrayRecommended) {
+      await ctx.db.patch(property._id, { isRecommended: true });
+    }
+
+    return "Backfill complete!";
+  },
+});

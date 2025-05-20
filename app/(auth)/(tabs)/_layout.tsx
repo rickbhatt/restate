@@ -37,7 +37,7 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
-        animation: "fade",
+        animation: "shift",
         tabBarButton: ({
           children,
           onPress,
@@ -72,6 +72,7 @@ const TabsLayout = () => {
         name="index"
         options={{
           headerShown: false,
+
           title: "Home",
           tabBarIcon: ({ focused }) => (
             <TabIcon icon={icons.home} focused={focused} title="Home" />
