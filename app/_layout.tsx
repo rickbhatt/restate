@@ -52,12 +52,12 @@ const InitialLayout = () => {
   return (
     <>
       <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack>
         <Stack.Protected guard={!isSignedIn as boolean}>
-          <Stack.Screen name="(public)" />
+          <Stack.Screen name="(public)" options={{ headerShown: false }} />
         </Stack.Protected>
         <Stack.Protected guard={isSignedIn as boolean}>
-          <Stack.Screen name="(auth)/(tabs)" />
+          <Stack.Screen name="(auth)/(tabs)" options={{ headerShown: false }} />
         </Stack.Protected>
       </Stack>
     </>

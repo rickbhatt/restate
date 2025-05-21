@@ -9,7 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -19,6 +19,14 @@ import icons from "@/constants/icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { facilities } from "@/constants/data";
 import Comment from "@/components/Comment";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  useAnimatedScrollHandler,
+  interpolate,
+  interpolateColor,
+} from "react-native-reanimated";
 
 const PropertyDetails = () => {
   const { id } = useLocalSearchParams<{ id: Id<"properties"> }>();
@@ -27,13 +35,78 @@ const PropertyDetails = () => {
 
   const { top, bottom } = useSafeAreaInsets();
 
+  const scrollY = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y;
+    },
+  });
+
+  const headerAnimatedStyle = useAnimatedStyle(() => {
+    // Animate background color
+    const backgroundColor = interpolateColor(
+      scrollY.value,
+      [0, 50],
+      ["rgba(255,255,255,0)", "rgba(255,255,255,1)"]
+    );
+    // Animate paddingBottom (from 0 to 12)
+    const paddingBottom = interpolate(scrollY.value, [0, 50], [0, 12], "clamp");
+    // Animate borderBottomWidth (from 0 to 1)
+    const borderBottomWidth = interpolate(
+      scrollY.value,
+      [0, 50],
+      [0, 1],
+      "clamp"
+    );
+    // Animate borderBottomColor (from transparent to rgba(0,0,0,0.1))
+    const borderBottomColor = interpolateColor(
+      scrollY.value,
+      [0, 50],
+      ["rgba(0,0,0,0)", "rgba(0,0,0,0.1)"]
+    );
+
+    return {
+      backgroundColor,
+      paddingBottom,
+      borderBottomWidth,
+      borderBottomColor,
+      width: "100%",
+    };
+  });
+
+  const router = useRouter();
+
   return (
-    <View
-      style={{
-        paddingBottom: bottom,
-      }}
-    >
-      <ScrollView contentContainerClassName="pb-32 bg-white">
+    <View style={{ paddingBottom: bottom }}>
+      <Stack.Screen
+        options={{
+          header: () => (
+            <Animated.View
+              className="flex flex-row items-center z-50 absolute px-7"
+              style={[
+                {
+                  paddingTop: top,
+                },
+                headerAnimatedStyle,
+              ]}
+            >
+              <Pressable
+                onPress={() => router.back()}
+                className="flex flex-row bg-white rounded-full size-11 items-center justify-center active:opacity-50"
+              >
+                <Ionicons name="arrow-back" size={20} color="black" />
+              </Pressable>
+            </Animated.View>
+          ),
+        }}
+      />
+      <Animated.ScrollView
+        overScrollMode="never"
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName="pb-32 bg-white"
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+      >
         <View className="relative w-full" style={{ height: height / 2 }}>
           <Image
             className="size-full"
@@ -44,36 +117,22 @@ const PropertyDetails = () => {
             source={images.whiteGradient}
             className="absolute top-0 w-full z-40"
           />
-          {/* <View
-              className="z-50 absolute inset-x-7"
-              style={{
-                top: Platform.OS === "ios" ? 70 : top,
-              }}
-            >
-              <View className="flex flex-row items-center w-full justify-between">
-                <Pressable
-                  onPress={() => {}}
-                  className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
-                >
-                  <Image source={icons.backArrow} className="size-5" />
-                </Pressable>
-
-                <View className="flex flex-row items-center gap-3">
-                  <Image
-                    source={icons.heart}
-                    className="size-7"
-                    tintColor={"#191D31"}
-                  />
-                  <Image source={icons.send} className="size-7" />
-                </View>
-              </View>
-            </View> */}
         </View>
         <View className="px-5 mt-7 flex gap-2">
           {/* property name */}
-          <Text className="text-2xl text-black font-rubik-extrabold">
-            {property?.name}
-          </Text>
+          <View className="flex flex-row items-center justify-between">
+            <Text className="text-2xl text-black font-rubik-extrabold">
+              {property?.name}
+            </Text>
+            <View className="flex flex-row items-center gap-5">
+              <Image
+                source={icons.heart}
+                className="size-7"
+                tintColor={"#191D31"}
+              />
+              <Image source={icons.send} className="size-7" />
+            </View>
+          </View>
           {/* property type, rating */}
           <View className="flex flex-row items-center gap-3">
             {/* property type */}
@@ -254,7 +313,7 @@ const PropertyDetails = () => {
             )}
           </View>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
       <View
         style={{
           paddingBottom: bottom + 10,

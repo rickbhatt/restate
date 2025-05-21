@@ -37,6 +37,7 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
+        headerShown: false,
         animation: "shift",
         tabBarButton: ({
           children,
@@ -71,8 +72,6 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          headerShown: false,
-
           title: "Home",
           tabBarIcon: ({ focused }) => (
             <TabIcon icon={icons.home} focused={focused} title="Home" />
@@ -82,7 +81,6 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="explore"
         options={{
-          headerShown: false,
           title: "Explore",
           tabBarIcon: ({ focused }) => (
             <TabIcon icon={icons.search} focused={focused} title="Explore" />
@@ -92,7 +90,6 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="profile"
         options={{
-          headerShown: false,
           title: "Profile",
           tabBarIcon: ({ focused }) => (
             <TabIcon icon={icons.person} focused={focused} title="Profile" />
