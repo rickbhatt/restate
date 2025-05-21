@@ -332,7 +332,7 @@ const PropertyDetails = () => {
               ₹{property?.price}
             </Text>
           </View>
-          <Pressable className="flex-1 flex flex-row items-center justify-center bg-primary-300 py-3 rounded-full shadow-lg shadow-zinc-400">
+          <Pressable className="flex-1 flex flex-row items-center justify-center bg-primary-300 py-3 rounded-full shadow-lg shadow-zinc-400 active:opacity-70">
             <Text className="text-white text-lg text-center font-rubik-bold">
               Book Now
             </Text>
