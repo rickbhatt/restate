@@ -7,6 +7,7 @@ import {
   Platform,
   Pressable,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useQuery } from "convex/react";
@@ -17,6 +18,7 @@ import images from "@/constants/images";
 import icons from "@/constants/icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { facilities } from "@/constants/data";
+import Comment from "@/components/Comment";
 
 const PropertyDetails = () => {
   const { id } = useLocalSearchParams<{ id: Id<"properties"> }>();
@@ -31,7 +33,7 @@ const PropertyDetails = () => {
         paddingBottom: bottom,
       }}
     >
-      <ScrollView contentContainerClassName="pb-4 bg-white">
+      <ScrollView contentContainerClassName="pb-32 bg-white">
         <View className="relative w-full" style={{ height: height / 2 }}>
           <Image
             className="size-full"
@@ -229,9 +231,55 @@ const PropertyDetails = () => {
             </View>
 
             {/* property reviews */}
+            {property?.reviews && property?.reviews.length > 0 && (
+              <View className="mt-7 flex flex-col">
+                <View className="flex flex-row items-center justify-between">
+                  <View className="flex flex-row items-center gap-2">
+                    <Image source={icons.star} className="size-6" />
+                    <Text className="text-black-300 text-xl font-rubik-bold">
+                      {property?.rating} ({property?.reviews?.length} reviews)
+                    </Text>
+                  </View>
+                  <Pressable>
+                    <Text className="text-primary-300 text-base font-rubik-bold">
+                      See All
+                    </Text>
+                  </Pressable>
+                </View>
+                {/* comment */}
+                <View className="mt-5">
+                  <Comment review={property?.reviews[0]} />
+                </View>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
+      <View
+        style={{
+          paddingBottom: bottom + 10,
+        }}
+        className="absolute bg-white bottom-0 w-full rounded-t-2xl border-t border-r border-l border-primary-200 p-7"
+      >
+        <View className="flex flex-row items-center justify-between gap-10">
+          <View className="flex flex-col items-start">
+            <Text className="text-black-200 text-base font-rubik-medium">
+              Price
+            </Text>
+            <Text
+              numberOfLines={1}
+              className="text-primary-300 text-start text-2xl font-rubik-bold"
+            >
+              ₹{property?.price}
+            </Text>
+          </View>
+          <Pressable className="flex-1 flex flex-row items-center justify-center bg-primary-300 py-3 rounded-full shadow-lg shadow-zinc-400">
+            <Text className="text-white text-lg text-center font-rubik-bold">
+              Book Now
+            </Text>
+          </Pressable>
+        </View>
+      </View>
     </View>
   );
 };
