@@ -1,4 +1,4 @@
-import { Card, FeatureCard } from "@/components/Cards";
+import { Card, ExploreCard, FeatureCard } from "@/components/Cards";
 import Filters from "@/components/Filters";
 import NoResults from "@/components/NoResults";
 import Search from "@/components/Search";
@@ -67,12 +67,10 @@ const Explore = () => {
       <FlatList
         data={properties}
         renderItem={({ item }) => (
-          <Card item={item} onPress={() => handleCardPress(item._id)} />
+          <ExploreCard item={item} onPress={() => handleCardPress(item._id)} />
         )}
         keyExtractor={(item) => item._id.toString()}
-        numColumns={2}
-        contentContainerClassName="pb-32"
-        columnWrapperClassName="flex gap-5 px-5"
+        contentContainerClassName="pb-32 px-5"
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           properties === undefined ? (
@@ -82,7 +80,7 @@ const Explore = () => {
           )
         }
         ListHeaderComponent={
-          <View className="px-5">
+          <View>
             <View className="flex flex-row items-center justify-between mt-5">
               <Pressable
                 className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center active:opacity-50"

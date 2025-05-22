@@ -1,32 +1,28 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  Dimensions,
-  Platform,
-  Pressable,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useQuery } from "convex/react";
+import Comment from "@/components/Comment";
+import { facilities } from "@/constants/data";
+import icons from "@/constants/icons";
+import images from "@/constants/images";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { StatusBar } from "expo-status-bar";
-import images from "@/constants/images";
-import icons from "@/constants/icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { facilities } from "@/constants/data";
-import Comment from "@/components/Comment";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useQuery } from "convex/react";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  useAnimatedScrollHandler,
   interpolate,
   interpolateColor,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PropertyDetails = () => {
   const { id } = useLocalSearchParams<{ id: Id<"properties"> }>();
