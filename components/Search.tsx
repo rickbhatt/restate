@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { Image, Pressable, TextInput, View } from "react-native";
 import { useDebouncedCallback } from "use-debounce";
 
-const Search = () => {
+interface SearchProp {
+  filterOnPress: () => void;
+}
+
+const Search = ({ filterOnPress }: SearchProp) => {
   const path = usePathname();
   const params = useLocalSearchParams<{ query?: string }>();
 
@@ -33,7 +37,10 @@ const Search = () => {
           placeholderTextColor={"#191D31"}
         />
       </View>
-      <Pressable className="active:opacity-50 active:bg-gray-100 rounded-full p-2">
+      <Pressable
+        onPress={filterOnPress}
+        className="active:opacity-50 active:bg-gray-100 rounded-full p-2"
+      >
         <Image source={icons.filter} className="size-5" />
       </Pressable>
     </View>

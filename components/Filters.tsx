@@ -1,9 +1,15 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
-import React, { useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { categories } from "@/constants/data";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { forwardRef, useMemo, useState } from "react";
+import { Pressable, ScrollView, Text } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
-const Filters = () => {
+interface OtherPropertyFiltersProps {
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
+}
+
+export const PropertyTypeFilters = () => {
   const params = useLocalSearchParams<{ filter?: string }>();
 
   const [selectedCategory, setSelectedCategory] = useState(
@@ -54,4 +60,23 @@ const Filters = () => {
   );
 };
 
-export default Filters;
+export const OtherPropertyFilters = ({
+  bottomSheetRef,
+}: OtherPropertyFiltersProps) => {
+  const snapPoints = useMemo(() => ["25%", "50%", "75%"], []);
+
+  return (
+    <BottomSheet
+      ref={bottomSheetRef}
+      index={-1}
+      snapPoints={snapPoints}
+      enablePanDownToClose={true}
+    >
+      <BottomSheetView className="flex-1 p-4">
+        <Text className="text-lg font-rubik-bold text-center">
+          Filter Options 🎉
+        </Text>
+      </BottomSheetView>
+    </BottomSheet>
+  );
+};
