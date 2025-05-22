@@ -1,9 +1,15 @@
 import { categories } from "@/constants/data";
+import icons from "@/constants/icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { forwardRef, useMemo, useState } from "react";
-import { Pressable, ScrollView, Text } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import React, { useCallback, useMemo, useState } from "react";
+import { Image, Pressable, ScrollView, Text } from "react-native";
 
 interface OtherPropertyFiltersProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>;
@@ -63,7 +69,65 @@ export const PropertyTypeFilters = () => {
 export const OtherPropertyFilters = ({
   bottomSheetRef,
 }: OtherPropertyFiltersProps) => {
-  const snapPoints = useMemo(() => ["25%", "50%", "75%"], []);
+  const [priceRange, setPriceRange] = useState<number[]>([0, 10000]);
+  const [areaRange, setAreaRange] = useState<number[]>([0, 10000]);
+  const [bedrooms, setBedrooms] = useState<number>(1);
+  const [bathrooms, setBathrooms] = useState<number>(1);
+
+  const handleSheetChange = useCallback((index: any) => {
+    console.log("Current snap point index:", index);
+    console.log("Current snap point value:", snapPoints[index]);
+  }, []);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+      />
+    ),
+    []
+  );
+
+  const snapPoints = useMemo(() => ["50%", "95%"], []);
+
+  const handleBottomSheetClose = () => {
+    bottomSheetRef.current?.close();
+  };
+
+  const handlePriceChange = (values: number[]) => {
+    setPriceRange(values);
+  };
+  const handleAreaRange = (values: number[]) => {
+    setAreaRange(values);
+  };
+
+  const handleBedRoomCounter = (type: string) => {
+    if (type === "plus") {
+      if (bedrooms >= 5) return;
+      setBedrooms((curr) => curr + 1);
+    } else if (type === "minus") {
+      if (bedrooms <= 1) return;
+      setBedrooms((curr) => curr - 1);
+    }
+  };
+  const handlerBathroomCounter = (type: string) => {
+    if (type === "plus") {
+      if (bedrooms >= 5) return;
+      setBathrooms((curr) => curr + 1);
+    } else if (type === "minus") {
+      if (bedrooms <= 1) return;
+      setBathrooms((curr) => curr - 1);
+    }
+  };
+
+  const handlerReset = () => {
+    setPriceRange([0, 10000]);
+    setBedrooms(1);
+    setBathrooms(1);
+    setAreaRange([0, 10000]);
+  };
 
   return (
     <BottomSheet
@@ -71,11 +135,188 @@ export const OtherPropertyFilters = ({
       index={-1}
       snapPoints={snapPoints}
       enablePanDownToClose={true}
+      backdropComponent={renderBackdrop}
+      onChange={handleSheetChange}
+      backgroundStyle={{
+        backgroundColor: "#fff",
+        borderRadius: 32,
+      }}
     >
-      <BottomSheetView className="flex-1 p-4">
-        <Text className="text-lg font-rubik-bold text-center">
-          Filter Options 🎉
-        </Text>
+      <BottomSheetView className="flex-1 flex-col gap-7 px-5">
+        {/* header */}
+        <BottomSheetView className="flex flex-row items-center justify-between">
+          <Pressable
+            className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center active:opacity-50"
+            onPress={handleBottomSheetClose}
+          >
+            <Image source={icons.backArrow} className="size-5" />
+          </Pressable>
+          <Text className="text- font-rubik-bold">Filters</Text>
+          <Pressable onPress={handlerReset}>
+            <Text className="text-base text-primary-300 font-rubik-bold">
+              Reset
+            </Text>
+          </Pressable>
+        </BottomSheetView>
+        {/* filters*/}
+        <BottomSheetScrollView
+          showsVerticalScrollIndicator={false}
+          overScrollMode={"never"}
+          contentContainerClassName="flex-1 flex flex-col gap-8"
+        >
+          {/* price range */}
+          <BottomSheetView className="w-full flex flex-col gap-5">
+            <Text className="text-lg font-rubik-medium text-black-300">
+              Price Range
+            </Text>
+            <BottomSheetView className="w-full flex flex-col items-center justify-center">
+              <Text className="text-base font-rubik text-black-200">
+                ₹{priceRange[0]} - ₹{priceRange[1]}
+              </Text>
+              <MultiSlider
+                values={priceRange}
+                sliderLength={300}
+                onValuesChange={handlePriceChange}
+                min={0}
+                max={10000}
+                step={10}
+                allowOverlap={false}
+                snapped
+                selectedStyle={{ backgroundColor: "#00a2ff" }}
+                unselectedStyle={{ backgroundColor: "#d3d3d3" }}
+                trackStyle={{
+                  height: 5,
+                  borderRadius: 5,
+                }}
+                markerStyle={{
+                  height: 25, // <-- Increase knob height
+                  width: 25, // <-- Increase knob width
+                  borderRadius: 12, // <-- Make it circular
+                  backgroundColor: "#fff",
+                  borderWidth: 3,
+                  borderColor: "#00a2ff",
+                }}
+                pressedMarkerStyle={{
+                  height: 29, // <-- Slightly bigger when pressed
+                  width: 29,
+                  borderRadius: 18,
+                  backgroundColor: "#fff",
+                  borderWidth: 3,
+                  borderColor: "#006bb3",
+                }}
+              />
+            </BottomSheetView>
+          </BottomSheetView>
+          {/* home details */}
+          <BottomSheetView className="w-full flex-col gap-5">
+            <Text className="text-lg font-rubik-medium text-black-300">
+              Home Details
+            </Text>
+            {/* bedrooms */}
+            <BottomSheetView className="flex flex-row items-center justify-between py-7 border-b border-primary-200">
+              <Text className="text-base text-black-200 font-rubik-medium">
+                Bedrooms
+              </Text>
+              {/* bedroom counter */}
+              <BottomSheetView className="flex flex-row items-center gap-3">
+                <Pressable
+                  onPress={() => handleBedRoomCounter("plus")}
+                  className="size-8 rounded-full bg-primary-200 flex flex-row justify-center items-center active:opacity-50"
+                >
+                  <Ionicons name="add" size={24} />
+                </Pressable>
+                <Text className="text-base text-black-300 font-rubik-medium">
+                  {bedrooms}
+                </Text>
+                <Pressable
+                  className="size-8 rounded-full bg-primary-200 flex flex-row justify-center items-center active:opacity-50"
+                  onPress={() => handleBedRoomCounter("minus")}
+                >
+                  <Ionicons name="remove" size={24} />
+                </Pressable>
+              </BottomSheetView>
+            </BottomSheetView>
+
+            {/* bathrooms */}
+            <BottomSheetView className="flex flex-row items-center justify-between py-7">
+              <Text className="text-base text-black-200 font-rubik-medium">
+                Bathrooms
+              </Text>
+              {/* bathroom counter */}
+              <BottomSheetView className="flex flex-row items-center gap-3">
+                <Pressable
+                  onPress={() => handlerBathroomCounter("plus")}
+                  className="size-8 rounded-full bg-primary-200 flex flex-row justify-center items-center active:opacity-50"
+                >
+                  <Ionicons name="add" size={24} />
+                </Pressable>
+                <Text className="text-base text-black-300 font-rubik-medium">
+                  {bathrooms}
+                </Text>
+                <Pressable
+                  className="size-8 rounded-full bg-primary-200 flex flex-row justify-center items-center active:opacity-50"
+                  onPress={() => handlerBathroomCounter("minus")}
+                >
+                  <Ionicons name="remove" size={24} />
+                </Pressable>
+              </BottomSheetView>
+            </BottomSheetView>
+          </BottomSheetView>
+
+          {/* area size */}
+
+          <BottomSheetView className="w-full flex flex-col gap-5">
+            <Text className="text-lg font-rubik-medium text-black-300">
+              Area Range
+            </Text>
+            <BottomSheetView className="w-full flex flex-col items-center justify-center">
+              <Text className="text-base font-rubik text-black-200">
+                {areaRange[0]} sqft - ₹{areaRange[1]} sqft
+              </Text>
+              <MultiSlider
+                values={areaRange}
+                sliderLength={300}
+                onValuesChange={handleAreaRange}
+                min={0}
+                max={10000}
+                step={10}
+                allowOverlap={false}
+                snapped
+                selectedStyle={{ backgroundColor: "#00a2ff" }}
+                unselectedStyle={{ backgroundColor: "#d3d3d3" }}
+                trackStyle={{
+                  height: 5,
+                  borderRadius: 5,
+                }}
+                markerStyle={{
+                  height: 25, // <-- Increase knob height
+                  width: 25, // <-- Increase knob width
+                  borderRadius: 12, // <-- Make it circular
+                  backgroundColor: "#fff",
+                  borderWidth: 3,
+                  borderColor: "#00a2ff",
+                }}
+                pressedMarkerStyle={{
+                  height: 29, // <-- Slightly bigger when pressed
+                  width: 29,
+                  borderRadius: 18,
+                  backgroundColor: "#fff",
+                  borderWidth: 3,
+                  borderColor: "#006bb3",
+                }}
+              />
+            </BottomSheetView>
+          </BottomSheetView>
+
+          {/* submit button */}
+          <BottomSheetView className="w-full flex flex-row justify-center">
+            <Pressable className="flex-1 flex flex-row items-center justify-center bg-primary-300 py-3 rounded-full shadow-lg shadow-zinc-400 active:opacity-70">
+              <Text className="text-white text-lg text-center font-rubik-bold">
+                Apply Filters
+              </Text>
+            </Pressable>
+          </BottomSheetView>
+        </BottomSheetScrollView>
       </BottomSheetView>
     </BottomSheet>
   );

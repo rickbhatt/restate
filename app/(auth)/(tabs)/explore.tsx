@@ -68,7 +68,7 @@ const Explore = () => {
   };
 
   const handleFilterPress = () => {
-    bottomSheetRef.current?.snapToIndex(0);
+    bottomSheetRef.current?.snapToIndex(1);
   };
 
   return (
