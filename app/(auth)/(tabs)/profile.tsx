@@ -7,11 +7,15 @@ import { useAuth } from "@clerk/clerk-expo";
 import React from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Constants from "expo-constants";
+import { useAppInfo } from "@/hooks/useAppInfo";
 
 const Profile = () => {
   const { signOut } = useAuth();
 
   const { userProfile } = useUserProfile();
+
+  const { appName, appVersion, currentYear } = useAppInfo();
 
   return (
     <SafeAreaView className="h-full bg-white">
@@ -62,6 +66,11 @@ const Profile = () => {
             showArrow={false}
             onPress={signOut}
           />
+        </View>
+        <View className="flex flex-col mt-5 py-3 border-t border-primary-200">
+          <Text className="text-sm font-rubik text-black-100">
+            © {currentYear} {appName} • v{appVersion}
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

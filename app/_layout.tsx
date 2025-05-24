@@ -57,7 +57,7 @@ const InitialLayout = () => {
           <Stack.Screen name="(public)" options={{ headerShown: false }} />
         </Stack.Protected>
         <Stack.Protected guard={isSignedIn as boolean}>
-          <Stack.Screen name="(auth)/(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         </Stack.Protected>
       </Stack>
     </>

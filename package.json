@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
+    "dev": "cross-env APP_VARIANT=development npx expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -49,7 +50,8 @@
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
     "tailwindcss": "^3.4.17",
-    "use-debounce": "^10.0.4"
+    "use-debounce": "^10.0.4",
+    "expo-updates": "~0.28.13"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

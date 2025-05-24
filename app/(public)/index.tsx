@@ -35,9 +35,14 @@ const SignIn = () => {
       });*/
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
+
+        router.replace("/(auth)/(tabs)");
+      } else {
+        router.replace("/(public)");
       }
     } catch (error) {
       console.log("🚀 ~ handleGoogleLogin ~ error:", error);
+      router.replace("/(public)");
     }
   };
 

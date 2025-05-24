@@ -1,6 +1,6 @@
 // app/oauth-native-callback.tsx
 
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 
 export default function OAuthCallback() {
   return (
