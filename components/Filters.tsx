@@ -9,7 +9,11 @@ import BottomSheet, {
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
-import { Image, Pressable, ScrollView, Text } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 interface OtherPropertyFiltersProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>;
@@ -73,6 +77,8 @@ export const OtherPropertyFilters = ({
   const [areaRange, setAreaRange] = useState<number[]>([0, 10000]);
   const [bedrooms, setBedrooms] = useState<number>(1);
   const [bathrooms, setBathrooms] = useState<number>(1);
+
+  const { top, bottom } = useSafeAreaInsets();
 
   const handleSheetChange = useCallback((index: any) => {
     console.log("Current snap point index:", index);
@@ -141,28 +147,37 @@ export const OtherPropertyFilters = ({
         backgroundColor: "#fff",
         borderRadius: 32,
       }}
+      handleIndicatorStyle={{
+        backgroundColor: "#000",
+      }}
     >
-      <BottomSheetView className="flex-1 flex-col gap-7 px-5">
-        {/* header */}
-        <BottomSheetView className="flex flex-row items-center justify-between">
+      {/* Main container with proper structure */}
+      <BottomSheetView className="flex-1 px-7">
+        {/* Fixed Header - NOT inside ScrollView */}
+        <BottomSheetView className="flex flex-row items-center justify-between py-4">
           <Pressable
             className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center active:opacity-50"
             onPress={handleBottomSheetClose}
           >
             <Image source={icons.backArrow} className="size-5" />
           </Pressable>
-          <Text className="text- font-rubik-bold">Filters</Text>
+          <Text className="text-2xl font-rubik-bold">Filters</Text>
           <Pressable onPress={handlerReset}>
             <Text className="text-base text-primary-300 font-rubik-bold">
               Reset
             </Text>
           </Pressable>
         </BottomSheetView>
-        {/* filters*/}
+
+        {/* Scrollable Content */}
         <BottomSheetScrollView
           showsVerticalScrollIndicator={false}
           overScrollMode={"never"}
-          contentContainerClassName="flex-1 flex flex-col gap-8"
+          contentContainerStyle={{
+            flexGrow: 1,
+            gap: 32, // Using style instead of className for gap
+            paddingBottom: 20, // Add bottom padding for better UX
+          }}
         >
           {/* price range */}
           <BottomSheetView className="w-full flex flex-col gap-5">
@@ -185,19 +200,22 @@ export const OtherPropertyFilters = ({
                 selectedStyle={{ backgroundColor: "#00a2ff" }}
                 unselectedStyle={{ backgroundColor: "#d3d3d3" }}
                 trackStyle={{
+                  // Track style for the slider track
                   height: 5,
                   borderRadius: 5,
                 }}
                 markerStyle={{
-                  height: 25, // <-- Increase knob height
-                  width: 25, // <-- Increase knob width
-                  borderRadius: 12, // <-- Make it circular
+                  // Marker style for the knobs
+                  height: 25,
+                  width: 25,
+                  borderRadius: 12,
                   backgroundColor: "#fff",
                   borderWidth: 3,
                   borderColor: "#00a2ff",
                 }}
                 pressedMarkerStyle={{
-                  height: 29, // <-- Slightly bigger when pressed
+                  // Marker style for the knobs
+                  height: 29,
                   width: 29,
                   borderRadius: 18,
                   backgroundColor: "#fff",
@@ -207,17 +225,18 @@ export const OtherPropertyFilters = ({
               />
             </BottomSheetView>
           </BottomSheetView>
+
           {/* home details */}
           <BottomSheetView className="w-full flex-col gap-5">
             <Text className="text-lg font-rubik-medium text-black-300">
               Home Details
             </Text>
+
             {/* bedrooms */}
             <BottomSheetView className="flex flex-row items-center justify-between py-7 border-b border-primary-200">
               <Text className="text-base text-black-200 font-rubik-medium">
                 Bedrooms
               </Text>
-              {/* bedroom counter */}
               <BottomSheetView className="flex flex-row items-center gap-3">
                 <Pressable
                   onPress={() => handleBedRoomCounter("plus")}
@@ -242,7 +261,6 @@ export const OtherPropertyFilters = ({
               <Text className="text-base text-black-200 font-rubik-medium">
                 Bathrooms
               </Text>
-              {/* bathroom counter */}
               <BottomSheetView className="flex flex-row items-center gap-3">
                 <Pressable
                   onPress={() => handlerBathroomCounter("plus")}
@@ -264,14 +282,13 @@ export const OtherPropertyFilters = ({
           </BottomSheetView>
 
           {/* area size */}
-
           <BottomSheetView className="w-full flex flex-col gap-5">
             <Text className="text-lg font-rubik-medium text-black-300">
               Area Range
             </Text>
             <BottomSheetView className="w-full flex flex-col items-center justify-center">
-              <Text className="text-base font-rubik text-black-200">
-                {areaRange[0]} sqft - ₹{areaRange[1]} sqft
+              <Text className="text-base font-ruby text-black-200">
+                {areaRange[0]} sqft - {areaRange[1]} sqft
               </Text>
               <MultiSlider
                 values={areaRange}
@@ -289,15 +306,15 @@ export const OtherPropertyFilters = ({
                   borderRadius: 5,
                 }}
                 markerStyle={{
-                  height: 25, // <-- Increase knob height
-                  width: 25, // <-- Increase knob width
-                  borderRadius: 12, // <-- Make it circular
+                  height: 25,
+                  width: 25,
+                  borderRadius: 12,
                   backgroundColor: "#fff",
                   borderWidth: 3,
                   borderColor: "#00a2ff",
                 }}
                 pressedMarkerStyle={{
-                  height: 29, // <-- Slightly bigger when pressed
+                  height: 29,
                   width: 29,
                   borderRadius: 18,
                   backgroundColor: "#fff",
@@ -309,7 +326,7 @@ export const OtherPropertyFilters = ({
           </BottomSheetView>
 
           {/* submit button */}
-          <BottomSheetView className="w-full flex flex-row justify-center">
+          <BottomSheetView className="w-full flex flex-row justify-center mt-4">
             <Pressable className="flex-1 flex flex-row items-center justify-center bg-primary-300 py-3 rounded-full shadow-lg shadow-zinc-400 active:opacity-70">
               <Text className="text-white text-lg text-center font-rubik-bold">
                 Apply Filters
