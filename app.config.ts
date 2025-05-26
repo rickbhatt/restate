@@ -31,7 +31,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: getAppName(),
   slug: "restate",
-  version: "1.0.2",
+  version: "1.0.3",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: "restate",
@@ -90,6 +90,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   updates: {
     url: "https://u.expo.dev/34bf979b-af19-46dd-bf90-0621edc459c1",
+    enabled: true,
+    checkAutomatically: "ON_LOAD",
   },
   runtimeVersion: {
     policy: "appVersion",
