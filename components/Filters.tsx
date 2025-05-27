@@ -9,11 +9,7 @@ import BottomSheet, {
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { Dimensions, Image, Pressable, ScrollView, Text } from "react-native";
 
 interface OtherPropertyFiltersProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>;
@@ -78,7 +74,7 @@ export const OtherPropertyFilters = ({
   const [bedrooms, setBedrooms] = useState<number>(1);
   const [bathrooms, setBathrooms] = useState<number>(1);
 
-  const { top, bottom } = useSafeAreaInsets();
+  const screenWidth = Dimensions.get("window").width;
 
   const handleSheetChange = useCallback((index: any) => {
     console.log("Current snap point index:", index);
@@ -143,6 +139,7 @@ export const OtherPropertyFilters = ({
       enablePanDownToClose={true}
       backdropComponent={renderBackdrop}
       onChange={handleSheetChange}
+      enableDynamicSizing={false}
       backgroundStyle={{
         backgroundColor: "#fff",
         borderRadius: 32,
@@ -185,12 +182,13 @@ export const OtherPropertyFilters = ({
               Price Range
             </Text>
             <BottomSheetView className="w-full flex flex-col items-center justify-center">
-              <Text className="text-base font-rubik text-black-200">
-                ₹{priceRange[0]} - ₹{priceRange[1]}
+              <Text className="text-base font-rubik text-black-300">
+                ₹{priceRange[0].toLocaleString("en-IN")} - ₹
+                {priceRange[1].toLocaleString("en-IN")}
               </Text>
               <MultiSlider
                 values={priceRange}
-                sliderLength={300}
+                sliderLength={screenWidth * 0.7}
                 onValuesChange={handlePriceChange}
                 min={0}
                 max={10000}
@@ -201,8 +199,8 @@ export const OtherPropertyFilters = ({
                 unselectedStyle={{ backgroundColor: "#d3d3d3" }}
                 trackStyle={{
                   // Track style for the slider track
-                  height: 5,
-                  borderRadius: 5,
+                  height: 4,
+                  borderRadius: 2,
                 }}
                 markerStyle={{
                   // Marker style for the knobs
@@ -287,12 +285,13 @@ export const OtherPropertyFilters = ({
               Area Range
             </Text>
             <BottomSheetView className="w-full flex flex-col items-center justify-center">
-              <Text className="text-base font-ruby text-black-200">
-                {areaRange[0]} sqft - {areaRange[1]} sqft
+              <Text className="text-base font-ruby text-black-300">
+                {areaRange[0].toLocaleString("en-IN")} sqft -{" "}
+                {areaRange[1].toLocaleString("en-IN")} sqft
               </Text>
               <MultiSlider
                 values={areaRange}
-                sliderLength={300}
+                sliderLength={screenWidth * 0.7}
                 onValuesChange={handleAreaRange}
                 min={0}
                 max={10000}
@@ -302,8 +301,8 @@ export const OtherPropertyFilters = ({
                 selectedStyle={{ backgroundColor: "#00a2ff" }}
                 unselectedStyle={{ backgroundColor: "#d3d3d3" }}
                 trackStyle={{
-                  height: 5,
-                  borderRadius: 5,
+                  height: 4,
+                  borderRadius: 2,
                 }}
                 markerStyle={{
                   height: 25,

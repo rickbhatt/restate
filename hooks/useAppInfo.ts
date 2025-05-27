@@ -1,5 +1,4 @@
-import Constants from "expo-constants";
-import { useMemo } from "react";
+import * as Application from "expo-application";
 
 interface AppInfoTypes {
   appVersion: string;
@@ -8,11 +7,9 @@ interface AppInfoTypes {
 }
 
 export const useAppInfo = (): AppInfoTypes => {
-  const { expoConfig } = Constants;
-
   return {
-    appName: expoConfig?.name || "Unknown",
-    appVersion: expoConfig?.version || "Unknown",
+    appName: Application.applicationName || "Unknown",
+    appVersion: Application.nativeApplicationVersion || "Unknown",
     currentYear: new Date().getFullYear(),
   };
 };
