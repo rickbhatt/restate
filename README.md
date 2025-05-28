@@ -2,10 +2,12 @@
 
 A modern real estate mobile application built with Expo React Native, showcasing property search, filtering capabilities, and secure user authentication.
 
-<img src="./sreenshots/home_screen.png" alt="home" width="150"/>
-<img src="./sreenshots/explore_screen.png" alt="explore" width="150"/>
-<img src="./sreenshots/profile_screen.png" alt="profile" width="150"/>
-<img src="./sreenshots/appDemo.gif" alt="appDemo" width="150"/>
+<p align="center">
+<img src="./sreenshots/home_screen.png" alt="home" width="200"/>
+<img src="./sreenshots/explore_screen.png" alt="explore" width="200"/>
+<img src="./sreenshots/profile_screen.png" alt="profile" width="200"/>
+<img src="./sreenshots/appDemo.gif" alt="appDemo" width="200"/>
+</p>
 
 ## 📱 About This Project
 
