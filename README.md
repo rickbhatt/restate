@@ -1,50 +1,72 @@
-# Welcome to your Expo app 👋
+# Real Estate App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern real estate mobile application built with Expo React Native, showcasing property search, filtering capabilities, and secure user authentication.
 
-## Get started
+<img src="./sreenshots/home_screen.png" alt="home" width="150"/>
+<img src="./sreenshots/explore_screen.png" alt="explore" width="150"/>
+<img src="./sreenshots/profile_screen.png" alt="profile" width="150"/>
+<img src="./sreenshots/appDemo.gif" alt="appDemo" width="150"/>
 
-1. Install dependencies
+## 📱 About This Project
 
-   ```bash
-   npm install
-   ```
+This is a **portfolio project** demonstrating full-stack mobile development skills with modern technologies and best practices. The app provides a complete real estate browsing experience with intuitive user interface and robust backend integration.
 
-2. Start the app
+## ✨ Key Features
 
-   ```bash
-    npx expo start
-   ```
+- **OAuth Authentication**: Secure user login and registration system
+- **Property Search**: Comprehensive property browsing with search functionality
+- **Advanced Filtering**: Filter properties by area, price, type, and other criteria
+- **Responsive UI**: Clean, modern interface optimized for mobile devices
+- **Real-time Data**: Dynamic property listings with live updates
 
-In the output, you'll find options to open the app in a
+## 🛠️ Technology Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**Frontend**
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Expo React Native
+- TypeScript
+- React Native Components
 
-## Get a fresh project
+**Authentication**
 
-When you're ready, run:
+- Clerk (OAuth Integration)
 
-```bash
-npm run reset-project
-```
+**Backend & Database**
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- Convex (Real-time backend)
 
-## Learn more
+## 🎯 Core Functionality
 
-To learn more about developing your project with Expo, look at the following resources:
+**User Authentication**
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- OAuth login/registration
+- Secure session management
+- User profile handling
 
-## Join the community
+**Property Management**
 
-Join our community of developers creating universal apps.
+- Browse property listings
+- Search with multiple parameters
+- Filter by various criteria
+- View detailed property information
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**User Experience**
+
+- Intuitive navigation
+- Smooth animations and transitions
+- Responsive layout design
+- Loading states and error handling
+
+## 📱 App Highlights
+
+This application demonstrates proficiency in:
+
+- Modern React Native development patterns
+- Third-party service integration (Clerk, Convex)
+- Mobile UX/UI best practices
+- Real-time data synchronization
+- Secure authentication implementation
+
+---
+
+**Portfolio Project** - Built to showcase full-stack mobile development capabilities using cutting-edge technologies.
