@@ -1,5 +1,6 @@
 import { categories } from "@/constants/data";
 import icons from "@/constants/icons";
+import { useScreenDimensions } from "@/hooks/useScreenDimensions";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -9,7 +10,7 @@ import BottomSheet, {
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
-import { Dimensions, Image, Pressable, ScrollView, Text } from "react-native";
+import { Image, Pressable, ScrollView, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface OtherPropertyFiltersProps {
@@ -77,9 +78,7 @@ export const OtherPropertyFilters = ({
 
   const { bottom } = useSafeAreaInsets();
 
-  const screenWidth = Dimensions.get("window").width;
-  const screenHeight = Dimensions.get("window").height;
-
+  const { screenHeight, screenWidth } = useScreenDimensions();
   const handleSheetChange = useCallback((index: any) => {
     console.log("Current snap point index:", index);
     console.log("Current snap point value:", snapPoints[index]);

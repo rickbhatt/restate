@@ -4,17 +4,11 @@ import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { useScreenDimensions } from "@/hooks/useScreenDimensions";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "convex/react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
@@ -27,7 +21,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const PropertyDetails = () => {
   const { id } = useLocalSearchParams<{ id: Id<"properties"> }>();
   const property = useQuery(api.properties.getPropertyById, { id: id });
-  const height = Dimensions.get("window").height;
+  const { screenHeight } = useScreenDimensions();
 
   const { top, bottom } = useSafeAreaInsets();
 
@@ -99,11 +93,14 @@ const PropertyDetails = () => {
       <Animated.ScrollView
         overScrollMode="never"
         showsVerticalScrollIndicator={false}
-        contentContainerClassName="pb-32 bg-white"
+        contentContainerStyle={{
+          paddingBottom: screenHeight * 0.15,
+        }}
+        contentContainerClassName="bg-white"
         onScroll={scrollHandler}
         scrollEventThrottle={16}
       >
-        <View className="relative w-full" style={{ height: height / 2 }}>
+        <View className="relative w-full" style={{ height: screenHeight / 2 }}>
           <Image
             className="size-full"
             source={{ uri: property?.imageUrl }}
