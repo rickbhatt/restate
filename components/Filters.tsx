@@ -10,6 +10,7 @@ import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
 import { Dimensions, Image, Pressable, ScrollView, Text } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface OtherPropertyFiltersProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>;
@@ -74,7 +75,10 @@ export const OtherPropertyFilters = ({
   const [bedrooms, setBedrooms] = useState<number>(1);
   const [bathrooms, setBathrooms] = useState<number>(1);
 
+  const { bottom } = useSafeAreaInsets();
+
   const screenWidth = Dimensions.get("window").width;
+  const screenHeight = Dimensions.get("window").height;
 
   const handleSheetChange = useCallback((index: any) => {
     console.log("Current snap point index:", index);
@@ -92,7 +96,7 @@ export const OtherPropertyFilters = ({
     []
   );
 
-  const snapPoints = useMemo(() => ["50%", "95%"], []);
+  const snapPoints = useMemo(() => ["45%", "75%"], []);
 
   const handleBottomSheetClose = () => {
     bottomSheetRef.current?.close();
@@ -116,10 +120,10 @@ export const OtherPropertyFilters = ({
   };
   const handlerBathroomCounter = (type: string) => {
     if (type === "plus") {
-      if (bedrooms >= 5) return;
+      if (bathrooms >= 5) return;
       setBathrooms((curr) => curr + 1);
     } else if (type === "minus") {
-      if (bedrooms <= 1) return;
+      if (bathrooms <= 1) return;
       setBathrooms((curr) => curr - 1);
     }
   };
@@ -140,6 +144,7 @@ export const OtherPropertyFilters = ({
       backdropComponent={renderBackdrop}
       onChange={handleSheetChange}
       enableDynamicSizing={false}
+      enableContentPanningGesture={false}
       backgroundStyle={{
         backgroundColor: "#fff",
         borderRadius: 32,
@@ -170,13 +175,13 @@ export const OtherPropertyFilters = ({
         <BottomSheetScrollView
           showsVerticalScrollIndicator={false}
           overScrollMode={"never"}
+          style={{ marginTop: 30 }}
           contentContainerStyle={{
-            flexGrow: 1,
-            gap: 32, // Using style instead of className for gap
-            paddingBottom: 20, // Add bottom padding for better UX
+            gap: 32,
+            paddingBottom: screenHeight * 0.15 + bottom,
           }}
         >
-          {/* price range */}
+          {/*price range*/}
           <BottomSheetView className="w-full flex flex-col gap-5">
             <Text className="text-lg font-rubik-medium text-black-300">
               Price Range
@@ -285,7 +290,7 @@ export const OtherPropertyFilters = ({
               Area Range
             </Text>
             <BottomSheetView className="w-full flex flex-col items-center justify-center">
-              <Text className="text-base font-ruby text-black-300">
+              <Text className="text-base font-rubik text-black-300">
                 {areaRange[0].toLocaleString("en-IN")} sqft -{" "}
                 {areaRange[1].toLocaleString("en-IN")} sqft
               </Text>
