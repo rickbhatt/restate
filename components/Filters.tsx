@@ -97,10 +97,6 @@ export const OtherPropertyFilters = ({
 
   const snapPoints = useMemo(() => ["45%", "75%"], []);
 
-  const handleBottomSheetClose = () => {
-    bottomSheetRef.current?.close();
-  };
-
   const handlePriceChange = (values: number[]) => {
     setPriceRange(values);
   };
@@ -132,6 +128,11 @@ export const OtherPropertyFilters = ({
     setBedrooms(1);
     setBathrooms(1);
     setAreaRange([0, 10000]);
+  };
+
+  const handleBottomSheetClose = () => {
+    handlerReset();
+    bottomSheetRef.current?.close();
   };
 
   return (
