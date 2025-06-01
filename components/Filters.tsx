@@ -1,5 +1,4 @@
 import { categories } from "@/constants/data";
-import icons from "@/constants/icons";
 import { useScreenDimensions } from "@/hooks/useScreenDimensions";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import BottomSheet, {
@@ -10,7 +9,7 @@ import BottomSheet, {
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
-import { Image, Pressable, ScrollView, Text } from "react-native";
+import { Pressable, ScrollView, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface OtherPropertyFiltersProps {
@@ -161,7 +160,7 @@ export const OtherPropertyFilters = ({
             className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center active:opacity-50"
             onPress={handleBottomSheetClose}
           >
-            <Image source={icons.backArrow} className="size-5" />
+            <Ionicons name="close-outline" size={20} color={"#000"} />
           </Pressable>
           <Text className="text-2xl font-rubik-bold">Filters</Text>
           <Pressable onPress={handlerReset}>

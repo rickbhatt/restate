@@ -31,7 +31,7 @@ const SignIn = () => {
      WITH THIS WE CAN SET THE REDIRECT URI, SO DEEP LINKING ISSUE DOES NOT HAPPEN
      const { createdSessionId, setActive } = await startGoogleOAuthFlow({
         strategy: "oauth_google",
-        redirectUrl: Linking.createURL("/(public)", { scheme: "restate" }),
+        redirectUrl: Linking.createURL("/(public)", { scheme: "findmynest" }),
       });*/
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
@@ -56,7 +56,7 @@ const SignIn = () => {
         />
         <View className="px-10">
           <Text className="text-base text-center uppercase font-rubik text-black-200">
-            Welcome to ReState
+            Welcome to FindMyNest
           </Text>
           <Text className="text-3xl font-rubik-bold text-black-300 text-center mt-2">
             Let's Get You Closer To {"\n"}{" "}

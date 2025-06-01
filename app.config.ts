@@ -5,36 +5,36 @@ const IS_PREVIEW = process.env.APP_VARIANT === "preview";
 
 const getUniqueIdentifier = () => {
   if (IS_DEV) {
-    return "com.ritankar.restate.dev";
+    return "com.ritankar.findmynest.dev";
   }
 
   if (IS_PREVIEW) {
-    return "com.ritankar.restate.preview";
+    return "com.ritankar.findmynest.preview";
   }
 
-  return "com.ritankar.restate";
+  return "com.ritankar.findmynest";
 };
 
 const getAppName = () => {
   if (IS_DEV) {
-    return "Restate (Dev)";
+    return "FindMyNest (Dev)";
   }
 
   if (IS_PREVIEW) {
-    return "Restate (Preview)";
+    return "FindMyNest (Preview)";
   }
 
-  return "Restate";
+  return "FindMyNest";
 };
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: getAppName(),
-  slug: "restate",
-  version: "1.0.4",
+  slug: "findmynest",
+  version: "1.2.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
-  scheme: "restate",
+  scheme: "findmynest",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   ios: {
@@ -44,7 +44,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     edgeToEdgeEnabled: true,
     adaptiveIcon: {
-      foregroundImage: "./assets/images/icon.png",
+      foregroundImage: "./assets/images/adaptive-icon.png",
+      monochromeImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
     package: getUniqueIdentifier(),
@@ -59,9 +60,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        image: "./assets/images/splash.png",
-        resizeMode: "cover",
+        image: "./assets/images/splash-icon-dark.png",
+        resizeMode: "contain",
+        imageWidth: 200,
         backgroundColor: "#ffffff",
+        dark: {
+          image: "./assets/images/splash-icon-light.png",
+          backgroundColor: "#000000",
+        },
         enableFullScreenImage_legacy: true,
       },
     ],
@@ -90,7 +96,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   updates: {
     url: "https://u.expo.dev/34bf979b-af19-46dd-bf90-0621edc459c1",
-    enabled: true,
     checkAutomatically: "ON_LOAD",
   },
   runtimeVersion: {
